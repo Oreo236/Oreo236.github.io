@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #ffeff6;
+            --secondary-color: #ffcfe0;
+            --accent-color: #ff7bac;
+            --light-color: #ffffff;
+            --dark-color: #4a2c40;
+            --text-color: #333333;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--dark-color);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            color: var(--dark-color);
+            font-size: 1.5rem;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.7);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .social-links a:hover {
+            transform: translateY(-3px);
+            background: white;
+            color: var(--accent-color);
+        }
+        
+        section {
+            padding: 3rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent-color);
+            margin: 0.5rem auto;
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        
+        .skill {
+            background-color: var(--secondary-color);
+            color: var(--dark-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        
+        .project-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            border: 1px solid var(--primary-color);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .project-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--primary-color);
+        }
+        
+        .project-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--accent-color);
+        }
+        
+        .project-description {
+            margin-bottom: 1.2rem;
+            color: #555;
+            font-size: 0.95rem;
+            flex-grow: 1;
+        }
+        
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.2rem;
+        }
+        
+        .project-tag {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            padding: 0.3rem 0.7rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .project-tag:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: auto;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: var(--dark-color);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .contact-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .loom-badge {
+            display: inline-block;
+            background: var(--primary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .loom-embed {
+            position: relative;
+            padding-bottom: 62.5%;
+            height: 0;
+            width: 100%;
+        }
+        
+        .loom-embed iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 0.5rem 1.5rem;
+            background: white;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .tab.active {
+            background: var(--accent-color);
+            color: white;
+        }
+        
+        .tab:hover {
+            background: var(--secondary-color);
+        }
+        
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-tag {
+            padding: 0.5rem 1rem;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--primary-color);
+            font-size: 0.9rem;
+        }
+        
+        .filter-tag.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+        
+        .filter-tag:hover {
+            background: var(--secondary-color);
+        }
+        
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .search-input {
+            padding: 0.8rem 1.2rem;
+            border: 1px solid var(--primary-color);
+            border-radius: 30px;
+            width: 100%;
+            max-width: 400px;
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+        
+        .search-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(255, 123, 172, 0.2);
+        }
+        
+        .video-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        
+        .video-modal.open {
+            opacity: 1;
+            visibility: visible;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 900px;
+            width: 90%;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-color);
+        }
+        
+        .no-projects {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 2rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Project data
+        const projectsData = [
+            {
+                id: 1,
+                title: "Food FlashCard",
+                description: "A game for the people who love food and know their countries well. This is a game that matches the national dish to its country. It may have you second guessing several times but, I truly hope it is fun and encourages people to experiment with their taste buds.",
+                image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+                demoLink: "#",
+                githubLink: "#", // Private project - no GitHub link will show
+                isPublic: false, // This project is private
+                loomEmbed: '<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/a5ca85b3a58d453d8e9e6f33d9d9dd02?sid=b0f4adbd-c1b4-44c7-b200-6474377d954d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>',
+                category: "frontend",
+                tags: ["React", "Node.js", "Javascript", "CSS", "Game"]
+            },
+            
+        ];
+
+        // Skills data
+        const skillsData = [
+            "Python", "JavaScript", "React", "Node.js", "HTML/CSS", "Git", 
+            "SQL", "Java", "Swift", "Docker", "OCaml", "Supabase"
+        ];
+
+        // Get all unique tags from projects
+        const allTags = [...new Set(projectsData.flatMap(project => project.tags))];
+
+        // Header Component
+        function Header() {
+            return (
+                <header>
+                    <div className="container">
+                        <div className="profile-header">
+                            <img src="/Users/oreoluwa/Oreo236.github.io/IMG_7170_Original.jpg" 
+                                 alt="Profile" className="profile-img" />
+                            <h1>Oreoluwa Adeniyi</h1>
+                            <p className="tagline">Aspiring Software Engineer | Passionate about creating beautiful and functional systems</p>
+                            <div className="social-links">
+                                <a href="https://github.com/Oreo236" aria-label="GitHub"><i className="fab fa-github"></i></a>
+                                <a href="https://www.linkedin.com/in/oreoluwa-adeniyi-a43087238/" aria-label="LinkedIn"><i className="fab fa-linkedin"></i></a>
+                                <a href="oaa42@cornell.edu" aria-label="Email"><i className="fas fa-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            );
+        }
+
+        // About Component
+        function About({ skills }) {
+            return (
+                <section id="about">
+                    <div className="container">
+                        <h2 className="section-title">About Me</h2>
+                        <div className="about-content">
+                            <div>
+                                <p>Hello! I am a passionate developer with experience in web development, app development, and creating innovative digital solutions. I love turning complex problems into simple, beautiful solutions.</p>
+                                <p>When I am not coding, you can find me baking, reading a book, exploring new technologies, or sharing my knowledge through tutoring.</p>
+                                <h3 style={{marginTop: '1.5rem'}}>My Skills</h3>
+                                <div className="skills-container">
+                                    {skills.map((skill, index) => (
+                                        <span key={index} className="skill">{skill}</span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+        // ProjectCard Component
+        function ProjectCard({ project, openVideoModal }) {
+            return (
+                <div className="project-card">
+                    {project.loomEmbed ? (
+                        <div 
+                            className="loom-embed" 
+                            dangerouslySetInnerHTML={{ __html: project.loomEmbed }} 
+                        />
+                    ) : (
+                        <img src={project.image} alt={project.title} className="project-img" />
+                    )}
+                    <div className="project-content">
+                        <h3 className="project-title">{project.title}</h3>
+                        <p className="project-description">{project.description}</p>
+                        
+                        <div className="project-tags">
+                            {project.tags.map((tag, index) => (
+                                <span key={index} className="project-tag">{tag}</span>
+                            ))}
+                        </div>
+                        
+                        <div className="project-links">
+                            <a href={project.demoLink} className="btn">Live Demo</a>
+                            {project.isPublic ? (
+                                <a href={project.githubLink} className="btn btn-outline">GitHub</a>
+                            ) : project.loomEmbed ? (
+                                <button className="btn btn-outline" onClick={() => openVideoModal(project.loomEmbed)}>
+                                    <i className="fab fa-youtube"></i> Watch Video
+                                </button>
+                            ) : (
+                                <span className="loom-badge">Private Repository</span>
+                            )}
+                        </div>
+                        {project.loomEmbed && (
+                            <div className="loom-badge">Private Code - Video Demo Available</div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        // Projects Component
+        function Projects({ projects, activeTab, setActiveTab, openVideoModal, searchTerm, setSearchTerm, activeTags, toggleTag }) {
+            const categories = ["all", "frontend", "backend", "fullstack"];
+            
+            // Filter projects based on active tab, search term, and tags
+            const filteredProjects = projects.filter(project => {
+                const matchesCategory = activeTab === "all" || project.category === activeTab;
+                const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                    project.description.toLowerCase().includes(searchTerm.toLowerCase());
+                const matchesTags = activeTags.length === 0 || 
+                                  project.tags.some(tag => activeTags.includes(tag));
+                
+                return matchesCategory && matchesSearch && matchesTags;
+            });
+            
+            return (
+                <section id="projects" style={{backgroundColor: '#fef7fa'}}>
+                    <div className="container">
+                        <h2 className="section-title">Featured Projects</h2>
+                        <p style={{textAlign: 'center', marginBottom: '2rem'}}>I included the demonstrations via Loom, I will have this section fully updated by Friday, September 5th, 2025. I had to shutdown my original portfolio because I need to update the backend so this is my temporary portfolio uploaded on GitHub.</p>
+                        
+                        {/* Search Input */}
+                        <div className="search-container">
+                            <input
+                                type="text"
+                                className="search-input"
+                                placeholder="Search projects..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>
+                        
+                        {/* Tag Filters */}
+                        <div className="filter-container">
+                            {allTags.map(tag => (
+                                <div 
+                                    key={tag} 
+                                    className={`filter-tag ${activeTags.includes(tag) ? 'active' : ''}`}
+                                    onClick={() => toggleTag(tag)}
+                                >
+                                    {tag}
+                                </div>
+                            ))}
+                        </div>
+                        
+                        {/* Category Tabs */}
+                        <div className="tab-container">
+                            {categories.map(category => (
+                                <div 
+                                    key={category} 
+                                    className={`tab ${activeTab === category ? 'active' : ''}`}
+                                    onClick={() => setActiveTab(category)}
+                                >
+                                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                                </div>
+                            ))}
+                        </div>
+                        
+                        <div className="projects-grid">
+                            {filteredProjects.length > 0 ? (
+                                filteredProjects.map(project => (
+                                    <ProjectCard 
+                                        key={project.id} 
+                                        project={project} 
+                                        openVideoModal={openVideoModal} 
+                                    />
+                                ))
+                            ) : (
+                                <div className="no-projects">
+                                    <h3>No projects found</h3>
+                                    <p>Try adjusting your search or filters</p>
+                                </div>
+                            )}
+                        </div>
+                        
+                        <div style={{textAlign: 'center', marginTop: '2rem'}}>
+                            <a href="https://github.com/Oreo236" className="btn" target="_blank">View My GitHub Profile</a>
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+        // Contact Component
+        function Contact() {
+            return (
+                <section id="contact">
+                    <div className="container">
+                        <h2 className="section-title">Get In Touch</h2>
+                        <div className="contact-content">
+                            <p>I am always open to discussing new projects, creative ideas, or opportunities to be part of your vision.</p>
+                            <p>Feel free to reach out to me through any of the platforms below:</p>
+                            <div className="social-links" style={{marginTop: '1.5rem', justifyContent: 'center'}}>
+                                <a href="#" aria-label="GitHub"><i className="fab fa-github"></i></a>
+                                <a href="#" aria-label="LinkedIn"><i className="fab fa-linkedin"></i></a>
+                                <a href="#" aria-label="Email"><i className="fas fa-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+        // Footer Component 
+        function Footer() {
+            return (
+                <footer>
+                </footer>
+            );
+        }
+
+        // VideoModal Component
+        function VideoModal({ isOpen, videoEmbed, onClose }) {
+            if (!isOpen) return null;
+            
+            return (
+                <div className={`video-modal ${isOpen ? 'open' : ''}`}>
+                    <div className="modal-content">
+                        <button className="close-modal" onClick={onClose}>
+                            <i className="fas fa-times"></i>
+                        </button>
+                        <h3>Project Demonstration</h3>
+                        <div style={{padding: '10px 0'}}>
+                            <div 
+                                dangerouslySetInnerHTML={{ __html: videoEmbed }} 
+                            />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Main App Component
+        function App() {
+            const [activeTab, setActiveTab] = React.useState("all");
+            const [searchTerm, setSearchTerm] = React.useState("");
+            const [activeTags, setActiveTags] = React.useState([]);
+            const [modalOpen, setModalOpen] = React.useState(false);
+            const [currentVideo, setCurrentVideo] = React.useState("");
+
+            // Toggle tag filter
+            const toggleTag = (tag) => {
+                if (activeTags.includes(tag)) {
+                    setActiveTags(activeTags.filter(t => t !== tag));
+                } else {
+                    setActiveTags([...activeTags, tag]);
+                }
+            };
+
+            // Open video modal
+            const openVideoModal = (videoEmbed) => {
+                setCurrentVideo(videoEmbed);
+                setModalOpen(true);
+            };
+
+            // Close video modal
+            const closeVideoModal = () => {
+                setModalOpen(false);
+                setCurrentVideo("");
+            };
+
+            return (
+                <div>
+                    <Header />
+                    <About skills={skillsData} />
+                    <Projects 
+                        projects={projectsData} 
+                        activeTab={activeTab}
+                        setActiveTab={setActiveTab}
+                        openVideoModal={openVideoModal}
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
+                        activeTags={activeTags}
+                        toggleTag={toggleTag}
+                    />
+                    <Contact />
+                    <Footer />
+                    
+                    <VideoModal 
+                        isOpen={modalOpen} 
+                        videoEmbed={currentVideo} 
+                        onClose={closeVideoModal} 
+                    />
+                </div>
+            );
+        }
+
+        // Render the App
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
